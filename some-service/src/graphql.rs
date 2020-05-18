@@ -17,6 +17,7 @@ impl Query {
             test_field_2: Successor1 {
                 some_field: 3
             }.into(),
+            enum_field: TestEnum::Value1,
         }
     }
 
@@ -28,6 +29,7 @@ impl Query {
             test_field_2: Successor1 {
                 some_field: 3
             }.into(),
+            enum_field: TestEnum::Value1,
         }
     }
 }
@@ -37,6 +39,7 @@ pub struct SomeType {
     pub id: ID,
     test_field: CustomDecimal,
     test_field_2: Interface,
+    enum_field: TestEnum,
 }
 
 #[Object]
@@ -51,6 +54,10 @@ impl SomeType {
 
     async fn test_field_2(&self) -> &Interface {
         &self.test_field_2
+    }
+
+    async fn enum_field(&self) -> &TestEnum {
+        &self.enum_field
     }
 }
 
@@ -84,4 +91,9 @@ enum Interface {
 #[derive(Clone)]
 struct Successor1 {
     some_field: i32,
+}
+
+#[Enum]
+enum TestEnum {
+    Value1,
 }
