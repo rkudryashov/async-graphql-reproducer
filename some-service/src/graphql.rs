@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use async_graphql::*;
 use rust_decimal::Decimal;
 use rust_decimal::prelude::ToPrimitive;
@@ -16,6 +14,9 @@ impl Query {
         SomeType {
             id: "1".into(),
             test_field: CustomDecimal(dec!(5.0)),
+            test_field_2: Successor1 {
+                some_field: 3
+            }.into(),
         }
     }
 
@@ -24,6 +25,9 @@ impl Query {
         SomeType {
             id: "1".into(),
             test_field: CustomDecimal(dec!(5.0)),
+            test_field_2: Successor1 {
+                some_field: 3
+            }.into(),
         }
     }
 }
@@ -32,6 +36,7 @@ impl Query {
 pub struct SomeType {
     pub id: ID,
     test_field: CustomDecimal,
+    test_field_2: Interface,
 }
 
 #[Object]
@@ -42,6 +47,10 @@ impl SomeType {
 
     async fn test_field(&self) -> &CustomDecimal {
         &self.test_field
+    }
+
+    async fn test_field_2(&self) -> &Interface {
+        &self.test_field_2
     }
 }
 
@@ -61,4 +70,18 @@ impl ScalarType for CustomDecimal {
     fn to_json(&self) -> Result<serde_json::Value> {
         Ok(serde_json::to_value(&self.0).expect("Can't get json from Decimal"))
     }
+}
+
+#[Interface(
+field(name = "some_field", type = "i32", context),
+)]
+#[derive(Clone)]
+enum Interface {
+    Successor1(Successor1),
+}
+
+#[SimpleObject]
+#[derive(Clone)]
+struct Successor1 {
+    some_field: i32,
 }
