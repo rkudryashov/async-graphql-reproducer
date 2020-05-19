@@ -1,6 +1,4 @@
 use async_graphql::*;
-use rust_decimal::Decimal;
-use rust_decimal::prelude::ToPrimitive;
 use rust_decimal_macros::dec;
 use serde::Serialize;
 
@@ -13,7 +11,7 @@ impl Query {
     async fn some_query(&self, ctx: &Context<'_>) -> SomeType {
         SomeType {
             id: "1".into(),
-            test_field: CustomDecimal(dec!(5.0)),
+            test_field: Decimal(dec!(5.0)),
             test_field_2: Successor1 {
                 some_field: 3
             }.into(),
@@ -25,7 +23,7 @@ impl Query {
     async fn find_entity_by_id(&self, ctx: &Context<'_>, id: ID) -> SomeType {
         SomeType {
             id: "1".into(),
-            test_field: CustomDecimal(dec!(5.0)),
+            test_field: Decimal(dec!(5.0)),
             test_field_2: Successor1 {
                 some_field: 3
             }.into(),
@@ -37,7 +35,7 @@ impl Query {
 #[derive(Clone)]
 pub struct SomeType {
     pub id: ID,
-    test_field: CustomDecimal,
+    test_field: Decimal,
     test_field_2: Interface,
     enum_field: TestEnum,
 }
@@ -48,7 +46,7 @@ impl SomeType {
         &self.id
     }
 
-    async fn test_field(&self) -> &CustomDecimal {
+    async fn test_field(&self) -> &Decimal {
         &self.test_field
     }
 
@@ -62,14 +60,10 @@ impl SomeType {
 }
 
 #[derive(Clone, Serialize)]
-pub struct CustomDecimal(pub Decimal);
+pub struct Decimal(pub rust_decimal::Decimal);
 
 #[Scalar]
-impl ScalarType for CustomDecimal {
-    fn type_name() -> &'static str {
-        "Decimal"
-    }
-
+impl ScalarType for Decimal {
     fn parse(value: Value) -> InputValueResult<Self> {
         unimplemented!()
     }
