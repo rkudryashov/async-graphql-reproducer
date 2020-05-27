@@ -1,4 +1,5 @@
 use async_graphql::*;
+use rust_decimal::prelude::ToPrimitive;
 use rust_decimal_macros::dec;
 use serde::Serialize;
 
@@ -68,8 +69,8 @@ impl ScalarType for Decimal {
         unimplemented!()
     }
 
-    fn to_json(&self) -> Result<serde_json::Value> {
-        Ok(serde_json::to_value(&self.0).expect("Can't get json from Decimal"))
+    fn to_value(&self) -> Value {
+        Value::Float(*&self.0.to_f64().expect("Can't get float from Decimal"))
     }
 }
 
