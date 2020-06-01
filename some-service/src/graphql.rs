@@ -4,9 +4,9 @@ use rust_decimal::prelude::ToPrimitive;
 use rust_decimal_macros::dec;
 use serde::Serialize;
 
-pub struct Query;
+pub type TestSchema = Schema<Query, EmptyMutation, Subscription>;
 
-pub type TestSchema = Schema<Query, EmptyMutation, EmptySubscription>;
+pub struct Query;
 
 #[Object]
 impl Query {
@@ -32,6 +32,13 @@ impl Query {
             enum_field: TestEnum::Value1,
         }
     }
+}
+
+pub struct Subscription;
+
+#[Subscription]
+impl Subscription {
+
 }
 
 #[derive(Clone)]
