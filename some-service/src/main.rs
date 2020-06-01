@@ -1,15 +1,15 @@
 use actix_web::{App, guard, HttpResponse, HttpServer, Result, web};
-use async_graphql::{EmptyMutation, EmptySubscription, Schema};
+use async_graphql::{EmptyMutation, Schema};
 use async_graphql::http::{GQLResponse, playground_source};
 use async_graphql_actix_web::GQLRequest;
 
-use graphql::{Query, TestSchema};
+use graphql::{Query, Subscription, TestSchema};
 
 mod graphql;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-    let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
+    let schema = Schema::build(Query, EmptyMutation, Subscription)
         .finish();
 
     HttpServer::new(move || {
