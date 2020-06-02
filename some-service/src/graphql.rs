@@ -21,7 +21,7 @@ impl Query {
         }
     }
 
-    #[entity]
+    //#[entity]
     async fn find_entity_by_id(&self, ctx: &Context<'_>, id: ID) -> SomeType {
         SomeType {
             id: "1".into(),

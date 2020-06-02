@@ -10,6 +10,7 @@ mod graphql;
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let schema = Schema::build(Query, EmptyMutation, Subscription)
+        .enable_federation()
         .finish();
 
     HttpServer::new(move || {
