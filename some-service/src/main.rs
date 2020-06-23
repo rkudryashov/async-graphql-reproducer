@@ -1,6 +1,6 @@
 use actix_web::{App, guard, HttpResponse, HttpServer, Result, web};
 use async_graphql::{EmptyMutation, Schema};
-use async_graphql::http::{GQLResponse, playground_source};
+use async_graphql::http::{GQLResponse, playground_source, GraphQLPlaygroundConfig};
 use async_graphql_actix_web::GQLRequest;
 
 use graphql::{Query, Subscription, TestSchema};
@@ -34,5 +34,5 @@ async fn index(
 async fn index_playground() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
-        .body(playground_source("/", Some("/"))))
+        .body(playground_source(GraphQLPlaygroundConfig::new("/"))))
 }
