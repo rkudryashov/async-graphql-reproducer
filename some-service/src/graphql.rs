@@ -83,7 +83,7 @@ impl ScalarType for CustomDecimal {
 }
 
 #[Interface(
-field(name = "some_field", type = "i32", context),
+field(name = "some_field", type = "i32"),
 )]
 #[derive(Clone)]
 enum Interface {
@@ -93,6 +93,7 @@ enum Interface {
 #[SimpleObject]
 #[derive(Clone)]
 struct Successor1 {
+    #[field(owned)]
     some_field: i32,
 }
 
