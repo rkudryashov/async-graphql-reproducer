@@ -1,7 +1,5 @@
 use async_graphql::*;
-use rust_decimal::Decimal;
-use rust_decimal::prelude::ToPrimitive;
-use rust_decimal_macros::dec;
+use bigdecimal::{BigDecimal, ToPrimitive};
 use serde::Serialize;
 
 pub type TestSchema = Schema<Query, EmptyMutation, Subscription>;
@@ -13,19 +11,17 @@ impl Query {
     async fn some_query(&self, ctx: &Context<'_>) -> SomeType {
         SomeType {
             id: "1".into(),
-            test_field: CustomDecimal(dec!(5.0)),
-            test_field_2: Successor1 {
-                some_field: 3
-            }.into(),
+            test_field: CustomDecimal(BigDecimal::from(2439.3)),
+            test_field_2: Successor1 { some_field: 3 }.into(),
             enum_field: TestEnum::Value1,
         }
     }
 
-    //#[entity]
+    #[entity]
     async fn find_entity_by_id(&self, ctx: &Context<'_>, id: ID) -> SomeType {
         SomeType {
             id: "1".into(),
-            test_field: CustomDecimal(dec!(5.0)),
+            test_field: CustomDecimal(BigDecimal::from(5.0)),
             test_field_2: Successor1 {
                 some_field: 3
             }.into(),
@@ -37,9 +33,7 @@ impl Query {
 pub struct Subscription;
 
 #[Subscription]
-impl Subscription {
-
-}
+impl Subscription {}
 
 #[derive(Clone)]
 pub struct SomeType {
@@ -69,7 +63,7 @@ impl SomeType {
 }
 
 #[derive(Clone, Serialize)]
-pub struct CustomDecimal(pub Decimal);
+pub struct CustomDecimal(pub BigDecimal);
 
 #[Scalar(name = "Decimal")]
 impl ScalarType for CustomDecimal {
@@ -78,7 +72,8 @@ impl ScalarType for CustomDecimal {
     }
 
     fn to_value(&self) -> Value {
-        Value::String(self.0.to_string())
+        // Value::String(self.0.to_string())
+        Value::Float(self.0.to_f64().unwrap())
     }
 }
 
