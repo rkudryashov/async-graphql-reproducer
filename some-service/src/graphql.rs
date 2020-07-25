@@ -17,6 +17,11 @@ impl Query {
         }
     }
 
+    #[cfg(target_os = "linux")]
+    async fn query_that_should_be_excluded(&self) -> &str {
+        ""
+    }
+
     #[entity]
     async fn find_entity_by_id(&self, ctx: &Context<'_>, id: ID) -> SomeType {
         SomeType {
