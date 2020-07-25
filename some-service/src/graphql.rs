@@ -72,8 +72,7 @@ impl ScalarType for CustomDecimal {
     }
 
     fn to_value(&self) -> Value {
-        // Value::String(self.0.to_string())
-        Value::Float(self.0.to_f64().unwrap())
+        Value::String(self.0.to_string())
     }
 }
 
