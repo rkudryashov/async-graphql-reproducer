@@ -17,7 +17,6 @@ impl Query {
         }
     }
 
-    #[cfg(target_os = "linux")]
     async fn query_that_should_be_excluded(&self) -> &str {
         ""
     }
