@@ -76,7 +76,7 @@ impl ScalarType for CustomDecimal {
     }
 
     fn to_value(&self) -> Value {
-        Value::String(self.0.to_string())
+        Value::Number(serde_json::Number::from_f64(self.0.to_f64().expect("Can't get f64")))
     }
 }
 
