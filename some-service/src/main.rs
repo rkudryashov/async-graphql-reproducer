@@ -1,7 +1,7 @@
 use actix_web::{App, guard, HttpResponse, HttpServer, Result, web};
 use async_graphql::{EmptyMutation, Schema};
-use async_graphql::http::{GQLResponse, playground_source, GraphQLPlaygroundConfig};
-use async_graphql_actix_web::GQLRequest;
+use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
+use async_graphql_actix_web::{Request, Response, WSSubscription};
 
 use graphql::{Query, Subscription, TestSchema};
 
@@ -24,15 +24,13 @@ async fn main() -> std::io::Result<()> {
         .await
 }
 
-async fn index(
-    schema: web::Data<TestSchema>,
-    gql_request: GQLRequest,
-) -> web::Json<GQLResponse> {
-    web::Json(GQLResponse(gql_request.into_inner().execute(&schema).await))
+pub async fn index(schema: web::Data<TestSchema>, req: Request) -> Response {
+    schema.execute(req.into_inner()).await.into()
 }
 
-async fn index_playground() -> Result<HttpResponse> {
+pub async fn index_playground() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
-        .body(playground_source(GraphQLPlaygroundConfig::new("/"))))
+        .body(playground_source(GraphQLPlaygroundConfig::new("/")))
+    )
 }

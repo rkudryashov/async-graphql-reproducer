@@ -116,22 +116,21 @@ impl ScalarType for CustomBigDecimal {
     }
 }
 
-#[Interface(
-field(name = "some_field", type = "i32"),
+#[derive(Interface, Clone)]
+#[graphql(
+    field(name = "some_field", type = "i32"),
 )]
-#[derive(Clone)]
 enum Interface {
     Successor1(Successor1),
 }
 
-#[SimpleObject]
-#[derive(Clone)]
+#[derive(SimpleObject,Clone)]
 struct Successor1 {
     #[field(owned)]
     some_field: i32,
 }
 
-#[Enum]
+#[derive(Enum, Copy, Clone, Eq, PartialEq)]
 enum TestEnum {
     Value1,
 }
