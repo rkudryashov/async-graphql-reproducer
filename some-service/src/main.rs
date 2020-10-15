@@ -1,15 +1,15 @@
 use actix_web::{App, guard, HttpResponse, HttpServer, Result, web};
-use async_graphql::{EmptyMutation, Schema};
-use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
+use async_graphql::{EmptyMutation, EmptySubscription, Schema};
+use async_graphql::http::{GraphQLPlaygroundConfig, playground_source};
 use async_graphql_actix_web::{Request, Response, WSSubscription};
 
-use graphql::{Query, Subscription, TestSchema};
+use graphql::{Query, TestSchema};
 
 mod graphql;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-    let schema = Schema::build(Query, EmptyMutation, Subscription)
+    let schema = Schema::build(Query, EmptyMutation, EmptySubscription)
         .enable_federation()
         .finish();
 

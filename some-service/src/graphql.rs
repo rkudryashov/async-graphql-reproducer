@@ -25,7 +25,7 @@ impl Query {
         ""
     }
 
-    #[entity]
+    #[graphql(entity)]
     async fn find_entity_by_id(&self, ctx: &Context<'_>, id: ID) -> SomeType {
         SomeType {
             id: "1".into(),
@@ -107,7 +107,7 @@ impl ScalarType for CustomBigDecimal {
                 let parsed_value = BigDecimal::from_str(s.as_str())?;
                 Ok(CustomBigDecimal(parsed_value))
             }
-            _ => Err(InputValueError::ExpectedType(value)),
+            _ => Err(InputValueError::expected_type(value)),
         }
     }
 
@@ -118,7 +118,7 @@ impl ScalarType for CustomBigDecimal {
 
 #[derive(Interface, Clone)]
 #[graphql(
-    field(name = "some_field", type = "i32"),
+    field(name = "some_field", type = "&i32"),
 )]
 enum Interface {
     Successor1(Successor1),
