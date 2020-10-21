@@ -5,7 +5,7 @@ use bigdecimal::{BigDecimal, ToPrimitive};
 use num_bigint::{BigInt, ToBigInt};
 use serde::Serialize;
 
-pub type TestSchema = Schema<Query, EmptyMutation, Subscription>;
+pub type TestSchema = Schema<Query, EmptyMutation, EmptySubscription>;
 
 pub struct Query;
 
@@ -38,11 +38,6 @@ impl Query {
         }
     }
 }
-
-pub struct Subscription;
-
-#[Subscription]
-impl Subscription {}
 
 #[derive(Clone)]
 pub struct SomeType {
